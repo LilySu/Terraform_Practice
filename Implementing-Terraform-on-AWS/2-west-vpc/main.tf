@@ -1,6 +1,42 @@
+# Providers - used for multiple regions, accounts, cloud services
+# Multiple Providers in a normal situation: Alias
+# provider "aws" {
+#   alias = "west" # name of instance of provider, name label of provider
+#   version = "~> 2.0"
+#   region  = var.region_2
+# }
+
+# Multiple Providers using a module:
+# # Map provider like this unless using default provider:
+# resource "aws_iam_role" "sec-role" {
+#   provider = aws.security
+# }
+# module "vpc" {
+#   providers = {
+#     aws = aws.prod-east
+#   }
+# }
+
 #############################################################################
 # VARIABLES
 #############################################################################
+
+# Variables:
+# define a region 1 and region 2
+# define vpc cidr ranges for region 1, cidr ranges for region 2
+# Providers:
+# create 2 instances of the aws provider. The differences are region and alias
+# Data Sources
+# previously we queried the availability zones for each region
+# to know which availability zones to use for subnets
+# specify a unique provider per each region to know which availability zones to query
+# Modules
+# specify resource name under providers
+# and used varables for region for the database_subnets
+# Output
+# specify vpc_id for region 1 and region 2
+
+
 
 variable "region_1" {
   type    = string
@@ -55,7 +91,7 @@ provider "aws" {
 provider "aws" {
   version = "~> 2.0"
   region  = var.region_2
-  alias = "west"
+  alias = "west" # name of instance of provider, name label of provider
 }
 
 #############################################################################
@@ -72,7 +108,7 @@ data "aws_availability_zones" "azs_west" {
 
 #############################################################################
 # RESOURCES
-#############################################################################  
+#############################################################################
 
 module "vpc_east" {
   source  = "terraform-aws-modules/vpc/aws"

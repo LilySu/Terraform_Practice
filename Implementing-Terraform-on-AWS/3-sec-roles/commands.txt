@@ -1,8 +1,10 @@
 # You will be using two AWS profiles
 # infra will be a user in the infrastructure account
+# the infra account has no permissions in the security account
 # sec will be a user in the security account
 # You will need to have created these users in the console already
 
+# creates infra profile in credentials
 aws configure --profile infra
 
 # Provide the Access and Secret keys
