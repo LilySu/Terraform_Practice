@@ -16,19 +16,24 @@ phases:
       - cd /usr/bin
       - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION_INSTALL}/terraform_${TF_VERSION_INSTALL}_linux_amd64.zip
       - unzip terraform.zip
-      - cd "$CODEBUILD_SRC_DIR"
-      - chmod a+x *.sh
+      - cd "$CODEBUILD_SRC_DIR" # environment variable populated by aws, always available for use
+      - chmod a+x *.sh # modify any scripts that end in .sh to be executable
       - cp ./terraform_actions.sh /usr/bin
 
   build:
     commands:
-      - cd "$CODEBUILD_SRC_DIR"
+      - cd "$CODEBUILD_SRC_DIR" # go back to our source directory
       - terraform version
+      # get terraform version, run terraform init specifying bucket, region, dynamo table name
+      # our backend config is in backend.tf
       - terraform init -backend-config="bucket=${TF_BUCKET}" -backend-config="region=${TF_REGION}" -backend-config="dynamodb_table=${TF_TABLE}"
+      # echo out from environment variable actions, probably plan and apply or plan and destroy
       - echo ${TF_ACTION}
+      # runs file in directory
       - terraform_actions.sh
 
 artifacts:
   files:
+    # takes this output file and writes it to our s3 bucket to review it later
     - tf_output.txt
 

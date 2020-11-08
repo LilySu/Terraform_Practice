@@ -39,6 +39,10 @@ variable "public_subnets" {
 # PROVIDERS
 #############################################################################
 
+# no authentification info specified
+# container assumes a role that has permissions to create a vpc
+# terraform will see that the role has been assumed and will use
+# credentials for authentification
 provider "aws" {
   version = "~> 2.0"
   region  = var.region
@@ -53,17 +57,17 @@ data "aws_availability_zones" "azs" {}
 #############################################################################
 # RESOURCES
 #############################################################################
-
+# we create a vpc
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.33.0"
-
+  # vpc will have a name that correspond to the workspace we are in
   name = "${terraform.workspace}-vpc"
   cidr = var.vpc_cidr_range
 
   azs            = slice(data.aws_availability_zones.azs.names, 0, 1)
   public_subnets = var.public_subnets
-
+  # we set the environment = to workspace value
   tags = {
     Environment = terraform.workspace
     Team        = "infra"
