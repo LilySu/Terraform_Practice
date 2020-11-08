@@ -213,3 +213,20 @@ output "template_output" {
 # CloudFormation is an option, you can create stacks from
 # Terraform and consume the output of existing stacks in your
 # Terraform configuration
+
+
+# Key Takeaways
+# multiple instances of an aws provider are needed when
+# accounts and multiple regions are reasons why
+
+# To authenticate, you can use
+# profiles in your credentials file
+# instance profiles associated with the ec2 instance or container in aws
+# or access and secret keys stored in environment variables
+
+# states can be stored remotely in s3 and dynamodb
+# get state out of local drive and into something remote
+
+# use source control to store configurations
+# automation is used in codebuild and codepipeline to deploy
+# what was in source control
