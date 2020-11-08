@@ -1,3 +1,83 @@
+# IAC Infrastructure as Code:
+# 1
+# we define instrastructure in a software-defined way
+# you express your infrastructure as code and deploy it with software
+# there is no manual process
+
+# 2
+# Reusability, repeatability - ie configurations can be used multiple times
+
+# 3
+# Your code can be checked in with source control (SEM)
+# Formats: Git, TFVC, Subversion
+# GitHub, BitBucket, GitLab, CodeCommit
+
+# 4
+# Automation
+
+
+# CICD Pipelines
+# Jenkins, AWS CodePipeline, Bamboo
+# Continuous Integration is usually performed when code is checked in
+
+# A process whereby code is checked to see if it is ready to go
+# and can also be integraed to the existing code base
+
+# Continuous Delivery - building an executable or package based on
+# code that had be checked in
+
+# There is a significant amount of automated testing and validataion
+# there may be multiple check points against the development stege, ie
+
+# once it moves past that state, it can be move towards a user acceptance
+# testing environment, tested there and then moved to staging and
+# development
+
+# pipeline is a series of stages
+
+# Terraform Workspaces
+# while the configuration may be the same,
+# in state storage, there's a different state file for each workspace
+
+# state data is separate
+# there are multiple environments
+# you can reference what workspace you are currently using
+
+# to make configuration decisions based on what environment you deployed to
+
+# ie deploying to development may be a different ec2 instance size than
+# something else
+
+# you can store information to check which environment it was deployed to
+
+# AWS Code Tools
+# CodeCommit - source control management solution
+# - use CodeBuild to deploy infrastructure
+# - allows you to create an executable or package based on codecommit
+    # but we use to deploy infrastructure instead
+# - use CodePipeline to deploy infrastructure in stages across multiple
+    # environments
+
+# A code pipeline is broken into stages
+# 1st stage is to get source from code commit that we use as part of deployment
+
+# Source
+# Each Step in a stage is an action
+# the action is to go to source and get the material
+
+# Development
+# plan out deployment by envoking code build,
+# plan and apply using codebuild
+# we'll need an s3 bucket to store logs and artifacts
+
+# CodeBuild spins up a linux container as part of our build environment
+# file buildspec.yaml
+# we initialize our terraform configuration
+
+# with the code commit url that we get at the end
+# we clone the repository locally, add some files to it push files back
+# to remote repository on code commit to kick off this entire process
+
 #############################################################################
 # VARIABLES
 #############################################################################
@@ -61,7 +141,7 @@ data "aws_iam_policy" "code_commit_power_user" {
 
 #############################################################################
 # RESOURCES
-#############################################################################  
+#############################################################################
 
 resource "random_integer" "rand" {
   min = 10000

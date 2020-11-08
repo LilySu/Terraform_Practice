@@ -1,14 +1,17 @@
 version: 0.2
 
+# we're setting a buildspec for aws to let it know that it is an automation environment
 env:
   variables:
-    TF_INPUT: "0"
-    TF_IN_AUTOMATION: "YES"
-    
+    TF_INPUT: "0" # don't prompt me for information, no one is there to input information
+    TF_IN_AUTOMATION: "YES" # lets terraform know to run some things in the backend
+
 phases:
   install:
     runtime-versions:
       nodejs: latest
+    # we copy the release of terraform that we want from the hashicorp site
+    # we use the environment variable to specify what version to install from hashicorp site
     commands:
       - cd /usr/bin
       - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION_INSTALL}/terraform_${TF_VERSION_INSTALL}_linux_amd64.zip
