@@ -1,3 +1,34 @@
+# Terraform State Data: is the information that maps your configuration to the real
+# world resources that has been deployed in your public cloud provider
+
+# ie. if you define a peer_vpc in your config that maps to an id in a state file that
+# maps to an actual vpc in aws
+
+# If you don't tell terraform where to put the data, terraform puts the data
+# in the same directory as your configuration locally
+
+# To move the data somewhere else to safeguard data and allow for collaboration.
+
+# location = backend
+# local backend = when terraform stores data in same directory as configuration
+# remote backends:
+# standdard: normal
+# enhanced: also runs terraform processes - terraform cloud and terraform enterprise
+
+# locking: backends that support locking will ensure another change is not being
+# implemented while you are currently making a change
+# workspaces: same configuration for multiple environments stored ina workplace
+# construct
+
+# Locking Support involes 2 things:
+# 1. You can write state data to S3 bucket
+# 2. DynamoDB table terraform puts the locking entry when it is manipulating state
+# in an S3 bucket
+
+# workspaces can be done complete in S3
+# granular control can be done in S3 bucket
+# S3 supports encryption
+
 ##################################################################################
 # VARIABLES
 ##################################################################################

@@ -2,6 +2,8 @@
 # VARIABLES
 #############################################################################
 
+# The following can be overriden with any tfvars file or -var commands
+
 variable "region" {
   type    = string
   default = "us-east-1"
@@ -28,6 +30,7 @@ variable "database_subnets" {
 # PROVIDERS
 #############################################################################
 
+# To stay in version 2, whether 2.1 or 2.9, but won't bump you to 3.0
 provider "aws" {
   version = "~> 2.0"
   region  = var.region
@@ -37,19 +40,21 @@ provider "aws" {
 # DATA SOURCES
 #############################################################################
 
+# Pulls full list of availability zones so we can use them when configuring vpc
 data "aws_availability_zones" "azs" {}
 
 #############################################################################
 # RESOURCES
-#############################################################################  
+#############################################################################
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws" # We are using from the Terraform registry
   version = "2.33.0"
 
   name = "dev-vpc"
   cidr = var.vpc_cidr_range
 
+  # availability zones: slice off a piece of list
   azs            = slice(data.aws_availability_zones.azs.names, 0, 2)
   public_subnets = var.public_subnets
 
